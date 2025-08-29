@@ -51,16 +51,16 @@
 #define STM32_PPRE1                         STM32_PPRE1_DIV2
 #define STM32_PPRE2                         STM32_PPRE2_DIV1
 #define STM32_MCOSEL                        STM32_MCOSEL_NOCLOCK
-#define STM32_ADC12PRES                     STM32_ADC12PRES_DIV4
-#define STM32_USART1SW                      STM32_USART1SW_PCLK
+//#define STM32_ADC12PRES                     STM32_ADC12PRES_DIV4
+//#define STM32_USART1SW                      STM32_USART1SW_PCLK
 #define STM32_USART2SW                      STM32_USART2SW_PCLK
 #define STM32_USART3SW                      STM32_USART3SW_PCLK
 #define STM32_I2C1SW                        STM32_I2C1SW_SYSCLK
-#define STM32_I2C2SW                        STM32_I2C2SW_SYSCLK
+//#define STM32_I2C2SW                        STM32_I2C2SW_SYSCLK
 #define STM32_TIM1SW                        STM32_TIM1SW_PCLK2
 #define STM32_TIM8SW                        STM32_TIM8SW_PCLK2
-#define STM32_RTCSEL                        STM32_RTCSEL_LSI
-#define STM32_USB_CLOCK_REQUIRED            FALSE
+//#define STM32_RTCSEL                        STM32_RTCSEL_LSI
+#define STM32_USB_CLOCK_REQUIRED            TRUE
 #define STM32_USBPRE                        STM32_USBPRE_DIV1P5
 
 /*
@@ -220,7 +220,7 @@
 /*
  * USB driver system settings.
  */
-#define STM32_USB_USE_USB1                  TRUE
+#define STM32_USB_USE_USB1                  FALSE
 #define STM32_USB_LOW_POWER_ON_SUSPEND      FALSE
 #define STM32_USB_USB1_HP_IRQ_PRIORITY      13
 #define STM32_USB_USB1_LP_IRQ_PRIORITY      14
