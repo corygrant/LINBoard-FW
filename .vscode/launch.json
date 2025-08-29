@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/linboard_v1.elf",
+            "name": "Debug LINBoard v1",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": ["interface/stlink.cfg", 
+						    "target/stm32f3x.cfg"],
+            "showDevDebugOutput": "raw",
+            "svdFile": "${workspaceFolder}/STM32F302.svd",
+            "rtos": "auto",
+            "v1": false,
+            "runToEntryPoint": "main",
+
+        }
+    ]
+}
