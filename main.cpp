@@ -1,8 +1,9 @@
-#include "ch.h"
+#include "ch.hpp"
 #include "hal.h"
 
 #include "linboard_config.h"
-//#include "can.h"
+#include "can.h"
+#include "enums.h"
 
 /*
  * Application entry point.
@@ -19,7 +20,7 @@ int main(void)
   palClearLine(LINE_CAN_LED);
   palClearLine(LINE_LIN_LED);
   palClearLine(LINE_STATUS_LED);
-  //InitCan();
+  InitCan(CanBitrate::Bitrate_500K, false);
 
   while (true)
   {

@@ -121,6 +121,8 @@ include $(BOARDDIR)/board.mk
 # ******************************************************
 LDSCRIPT= $(STARTUPLD)/STM32F303xC.ld
 
+$(info Using linker script $(LDSCRIPT))
+
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CSRC = $(ALLCSRC)
@@ -129,6 +131,8 @@ CSRC = $(ALLCSRC)
 # setting.
 CPPSRC = $(ALLCPPSRC) \
          $(BOARDDIR)/port.cpp \
+         can.cpp \
+         mailbox.cpp \
          main.cpp
          
 
