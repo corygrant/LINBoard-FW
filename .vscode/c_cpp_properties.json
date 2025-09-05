@@ -40,16 +40,6 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-arm",
-            "compilerArgs": [
-                "-mcpu=cortex-m4",
-                "-mthumb",
-                "-mfloat-abi=hard",
-                "-mfpu=fpv4-sp-d16"
-            ],
-            "defines": [
-                "STM32F302xC",
-                "CORTEX_USE_FPU=TRUE"
-            ],
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/ChibiOS/os/common/ext/ARM/CMSIS/Core/Include",
