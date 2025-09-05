@@ -28,3 +28,10 @@ enum class FatalErrorType : uint8_t
   ErrTemp,
   ErrPwm
 };
+
+enum class LedType
+{
+    Status,
+    Lin,
+    Can
+};

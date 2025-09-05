@@ -4,6 +4,7 @@
 #include "linboard_config.h"
 #include "can.h"
 #include "enums.h"
+#include "mailbox.h"
 
 /*
  * Application entry point.
@@ -12,14 +13,10 @@ int main(void)
 {
 
   halInit();
-  palSetLine(LINE_CAN_LED);
-  palSetLine(LINE_LIN_LED);
-  palSetLine(LINE_STATUS_LED);
   chSysInit();
 
-  palClearLine(LINE_CAN_LED);
-  palClearLine(LINE_LIN_LED);
-  palClearLine(LINE_STATUS_LED);
+  InitMailboxes();
+
   InitCan(CanBitrate::Bitrate_500K, false);
 
   while (true)

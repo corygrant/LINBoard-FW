@@ -50,10 +50,23 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-arm",
+            "compilerArgs": [
+                "-mcpu=cortex-m4",
+                "-mthumb",
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16"
+            ],
+            "defines": [
+                "STM32F302xC",
+                "CORTEX_USE_FPU=TRUE"
+            ],
             "includePath": [
                 "${workspaceFolder}/**",
+                "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/lib/gcc/arm-none-eabi/14.2.1/include",
+                "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/arm-none-eabi/include",
                 "${workspaceFolder}/ChibiOS/os/common/ext/ARM/CMSIS/Core/Include",
                 "${workspaceFolder}/ChibiOS/os/common/ext/ST/STM32F3xx",
+                "${workspaceFolder}/ChibiOS/os/common/oop/include",
                 "${workspaceFolder}/ChibiOS/os/common/portability/GCC",
                 "${workspaceFolder}/ChibiOS/os/common/ports/ARM-common/include",
                 "${workspaceFolder}/ChibiOS/os/common/ports/ARMv7-M",
@@ -76,15 +89,14 @@
                 "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/USARTv2",
                 "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/USBv1",
                 "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/xWDGv1",
-                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD",
                 "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/STM32F3xx",
                 "${workspaceFolder}/ChibiOS/os/hal/ports/common/ARMCMx",
                 "${workspaceFolder}/ChibiOS/os/license",
                 "${workspaceFolder}/ChibiOS/os/oslib/include",
                 "${workspaceFolder}/ChibiOS/os/rt/include",
                 "${workspaceFolder}/ChibiOS/os/various/cpp_wrappers",
-                "${workspaceFolder}/cfg",
-                "${workspaceFolder}/boards/linboard_v1"
+                "${workspaceFolder}/boards/linboard_v1",
+                "${workspaceFolder}/cfg"
             ]
         }
     ],
