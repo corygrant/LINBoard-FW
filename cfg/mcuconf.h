@@ -56,10 +56,10 @@
 #define STM32_USART2SW                      STM32_USART2SW_PCLK
 #define STM32_USART3SW                      STM32_USART3SW_PCLK
 #define STM32_I2C1SW                        STM32_I2C1SW_SYSCLK
-//#define STM32_I2C2SW                        STM32_I2C2SW_SYSCLK
+#define STM32_I2C2SW                        STM32_I2C2SW_SYSCLK
 #define STM32_TIM1SW                        STM32_TIM1SW_PCLK2
 #define STM32_TIM8SW                        STM32_TIM8SW_PCLK2
-//#define STM32_RTCSEL                        STM32_RTCSEL_LSI
+#define STM32_RTCSEL                        STM32_RTCSEL_LSI
 #define STM32_USB_CLOCK_REQUIRED            TRUE
 #define STM32_USBPRE                        STM32_USBPRE_DIV1P5
 
