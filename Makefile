@@ -133,6 +133,7 @@ CPPSRC = $(ALLCPPSRC) \
          $(BOARDDIR)/port.cpp \
          can.cpp \
          mailbox.cpp \
+         usb.cpp \
          main.cpp
          
 
