@@ -4,6 +4,7 @@
 #include "linboard_config.h"
 #include "can.h"
 #include "usb.h"
+#include "lin.h"
 #include "enums.h"
 #include "mailbox.h"
 
@@ -21,6 +22,8 @@ int main(void)
   InitCan(CanBitrate::Bitrate_500K, false);
 
   InitUsb();
+
+  InitLin();
 
   while (true)
   {
