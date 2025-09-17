@@ -323,9 +323,9 @@
                                      PIN_OSPEED_HIGH(GPIOA_SWCLK) |         \
                                      PIN_OSPEED_HIGH(GPIOA_PIN15))
 #define VAL_GPIOA_PUPDR             (PIN_PUPDR_PULLUP(GPIOA_PIN0) |         \
-                                     PIN_PUPDR_PULLDOWN(GPIOA_PIN1) |         \
+                                     PIN_PUPDR_PULLUP(GPIOA_PIN1) |         \
                                      PIN_PUPDR_PULLDOWN(GPIOA_PIN2) |         \
-                                     PIN_PUPDR_PULLDOWN(GPIOA_PIN3) |         \
+                                     PIN_PUPDR_PULLUP(GPIOA_PIN3) |         \
                                      PIN_PUPDR_PULLUP(GPIOA_PIN4) |         \
                                      PIN_PUPDR_PULLDOWN(GPIOA_PIN5) |         \
                                      PIN_PUPDR_PULLDOWN(GPIOA_PIN6) |         \

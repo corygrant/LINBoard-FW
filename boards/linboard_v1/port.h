@@ -14,10 +14,3 @@ const I2CConfig i2cConfig = {
     .cr1              = 0,
     .cr2              = 0
 };
-
-const SerialConfig linConfig = {
-    19200,                  // Baud rate
-    0,                      // CR1 register
-    USART_CR2_LINEN,        // CR2 register  
-    0                       // CR3 register
-};

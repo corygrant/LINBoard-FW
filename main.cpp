@@ -27,6 +27,7 @@ int main(void)
 
   while (true)
   {
+    bOn = !bOn;
     palSetLine(LINE_CAN_LED);
     palSetLine(LINE_LIN_LED);
     palSetLine(LINE_STATUS_LED);
