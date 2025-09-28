@@ -10,8 +10,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/ChibiOS/os/common/ext/ARM/CMSIS/Core/Include",
                 "${workspaceFolder}/ChibiOS/os/common/ext/ST/STM32F3xx",
+                "${workspaceFolder}/ChibiOS/os/common/oop/include",
                 "${workspaceFolder}/ChibiOS/os/common/portability/GCC",
-                "${workspaceFolder}/ChibiOS/os/common/ports/ARM-common/include",
                 "${workspaceFolder}/ChibiOS/os/common/ports/ARMv7-M",
                 "${workspaceFolder}/ChibiOS/os/common/startup/ARMCMx/compilers/GCC",
                 "${workspaceFolder}/ChibiOS/os/common/startup/ARMCMx/devices/STM32F3xx",
@@ -29,9 +29,8 @@
                 "${workspaceFolder}/ChibiOS/os/oslib/include",
                 "${workspaceFolder}/ChibiOS/os/rt/include",
                 "${workspaceFolder}/ChibiOS/os/various/cpp_wrappers",
-                "${workspaceFolder}/cfg",
                 "${workspaceFolder}/boards/linboard_v1",
-                "${workspaceFolder}"
+                "${workspaceFolder}/cfg"
             ]
         },
         {
