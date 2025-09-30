@@ -19,6 +19,8 @@ int main(void)
 
   InitMailboxes();
 
+  palClearLine(LINE_CAN_STANDBY); //Enable CAN transceiver
+
   InitCan(CanBitrate::Bitrate_500K, false);
 
   InitUsb();
@@ -27,13 +29,31 @@ int main(void)
 
   while (true)
   {
-    palSetLine(LINE_CAN_LED);
-    palSetLine(LINE_LIN_LED);
-    palSetLine(LINE_STATUS_LED);
-    chThdSleepMilliseconds(500);
-    palClearLine(LINE_CAN_LED);
-    palClearLine(LINE_LIN_LED);
-    palClearLine(LINE_STATUS_LED);
-    chThdSleepMilliseconds(500);
+    if(CanRxIsActive())
+        palSetLine(LINE_CAN_LED);
+    else
+        palClearLine(LINE_CAN_LED);
+
+    if(LinRxIsActive())
+        palSetLine(LINE_LIN_LED);
+    else
+        palClearLine(LINE_LIN_LED);
+
+    CANTxFrame stMsg;
+    stMsg.SID = 50;
+    stMsg.DLC = 8;
+    stMsg.data8[0] = 1;
+    stMsg.data8[1] = 2;
+    stMsg.data8[2] = 3;
+    stMsg.data8[3] = 4;
+    stMsg.data8[4] = 5;
+    stMsg.data8[5] = 6;
+    stMsg.data8[6] = 7;
+    stMsg.data8[7] = 8;
+    stMsg.IDE = CAN_IDE_STD;
+    stMsg.RTR = CAN_RTR_DATA;
+    PostTxFrame(&stMsg);
+
+    chThdSleepMilliseconds(50);
   }
 }

@@ -17,4 +17,5 @@ extern uint8_t nData2;
 extern bool bMoving;
 extern uint8_t nWiperPos;
 
-void InitLin();
+void InitLin(void);
+bool LinRxIsActive(void);

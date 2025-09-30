@@ -6,6 +6,8 @@
 
 #include <iterator>
 
+#define RX_TIMEOUT_MS 100
+
 static CANFilter canfilters[STM32_CAN_MAX_FILTERS];
 static uint32_t nFilterIds[STM32_CAN_MAX_FILTERS * 2];
 static bool bFilterExtended[STM32_CAN_MAX_FILTERS * 2];
@@ -33,7 +35,7 @@ void CanTxThread(void *)
             {
                 msg.IDE = CAN_IDE_STD;
                 msg.RTR = CAN_RTR_DATA;
-                canTryTransmitI(&CAND1, CAN_ANY_MAILBOX, &msg);
+                res = canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &msg, TIME_IMMEDIATE);
                 // Returns true if mailbox full or nothing connected
                 // TODO: What to do if no tx?
 
@@ -200,6 +202,11 @@ void ConfigureCanFilters()
 uint32_t GetLastCanRxTime()
 {
     return nLastCanRxTime;
+}
+
+bool CanRxIsActive()
+{
+    return (SYS_TIME - nLastCanRxTime) < RX_TIMEOUT_MS;
 }
 
 void SetCanFilterEnabled(bool bEnabled)

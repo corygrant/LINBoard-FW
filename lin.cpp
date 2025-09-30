@@ -2,6 +2,8 @@
 #include "port.h"
 #include <cstring>
 
+#define RX_TIMEOUT_MS 500
+
 uint8_t nCounter = 0;
 uint8_t nData1 = 0;
 uint8_t nData2 = 0;
@@ -14,8 +16,10 @@ bool bIntMode = false;
 bool bSwipeMode = false;
 uint8_t nIntModeSpeed = 0;
 
+uint32_t nLastRxTime = 0;
+
 static UARTConfig lin_config = {
-    .txend1_cb = NULL,      // Called when transmission completes
+    .txend1_cb = NULL,
     .txend2_cb = NULL,
     .rxend_cb = NULL,
     .rxchar_cb = NULL,
@@ -28,7 +32,6 @@ static UARTConfig lin_config = {
     .cr3 = 0
 };
 
-
 static void LinSendBreak(void)
 {
     UARTD2.usart->RQR |= USART_RQR_SBKRQ;
@@ -38,7 +41,6 @@ static void LinSendBreak(void)
         chThdSleepMicroseconds(10);
     }
 
-    //chThdSleepMicroseconds(500);
 }
 
 // Calculate protected ID with parity bits
@@ -49,7 +51,7 @@ static uint8_t LinCalculateProtectedId(uint8_t id) {
     return id | ((p0 & 1) << 6) | ((p1 & 1) << 7);
 }
 
-uint8_t calculateLINChecksum(uint8_t protected_id, uint8_t *data, size_t length) {
+uint8_t calculateLIN2xChecksum(uint8_t protected_id, uint8_t *data, size_t length) {
     uint16_t sum = protected_id;
     
     for(uint8_t i = 0; i < length; i++) {
@@ -155,6 +157,8 @@ msg_t LinGetResponse(uint8_t id, stLinFrame *rxFrame) {
     if (expected_checksum != rxData[rxFrame->nLength]) {
         return MSG_RESET; // Checksum error
     }
+
+    nLastRxTime = SYS_TIME;
     
     rxFrame->nId = id;
     rxFrame->nChecksum = rxData[rxFrame->nLength];
@@ -169,8 +173,6 @@ static THD_FUNCTION(lin_master_thread, arg) {
     chRegSetThreadName("lin_master");
 
     stLinFrame frame;
-
-    //ConfigureLinMode(&UARTD2);
 
     nCounter = 0;
 
@@ -189,10 +191,6 @@ static THD_FUNCTION(lin_master_thread, arg) {
         frame.nData[3] = 0x00;
         frame.nData[4] = 0x00;
 
-        //frame.nData[5] = 0x00;
-        //frame.nData[6] = 0x00;
-        //frame.nData[7] = 0x00;
-
         if (LinSendFrame(&frame, true) == MSG_OK) {
             // Frame sent successfully
 
@@ -207,9 +205,7 @@ static THD_FUNCTION(lin_master_thread, arg) {
         frame.nData[2] = 0x00;
         frame.nData[3] = 0x00;
         frame.nData[4] = 0x00;
-        //frame.nData[5] = 0x00;
-        //frame.nData[6] = 0x00;
-        //frame.nData[7] = 0x00;
+
         frame.nChecksum = 0x00;
 
         LinGetResponse(0xB1, &frame);
@@ -218,60 +214,12 @@ static THD_FUNCTION(lin_master_thread, arg) {
         nWiperPos = frame.nData[1];
 
         chThdSleepMilliseconds(120);
-        
-
     }
 }
 
-void sendLINWakeupPulses(void) {
-    
-    // Disable UART temporarily to control TX pin manually
-    uartStop(&UARTD2);
-    
-    // Configure TX pin as GPIO output
-    palSetLineMode(LINE_LIN_TX, PAL_MODE_OUTPUT_PUSHPULL); // Adjust pin for your setup
-    
-    // Send wake-up pulses: 5-10 dominant periods
-    for(int i = 0; i < 8; i++) {
-        palClearLine(LINE_LIN_TX);   // Dominant (12V)
-        chThdSleepMicroseconds(500);  // 500µs dominant
-        palSetLine(LINE_LIN_TX);    // Recessive (0V)
-        chThdSleepMicroseconds(500);  // 500µs recessive
-    }
-    
-    // Reconfigure pin back to UART
-    palSetLineMode(LINE_LIN_TX, PAL_MODE_ALTERNATE(7)); // AF7 for USART
-
-    // Re-enable UART
-    uartStart(&UARTD2, &lin_config);
-
-    // Wait for slaves to wake up
-    chThdSleepMilliseconds(100);
-}
-
-void sendLINWakeupFrame(void) {
-    // Send wake-up frame with PID 0x00
-    size_t size;
-
-    size = 1;
-    uint8_t txData[1] = {0x00}; // PID 0x00
-    systime_t timeout = chTimeMS2I(10);
-
-    uartSendFullTimeout(&UARTD2, &size, &txData, timeout);
-    
-    // Wait for slaves to process wake-up
-    chThdSleepMilliseconds(50);
-}
-
-void sendLINWakeupBreaks(void) {
-    // Send multiple break fields to ensure wake-up
-    for(int i = 0; i < 3; i++) {
-        LinSendBreak();
-        chThdSleepMicroseconds(1000);
-    }
-    
-    // Wait for slaves to wake up
-    chThdSleepMilliseconds(100);
+bool LinRxIsActive(void)
+{
+    return (SYS_TIME - nLastRxTime) < RX_TIMEOUT_MS;
 }
 
 // Put LIN transceiver to sleep
@@ -283,24 +231,13 @@ void LinSleep(void) {
 // Wake up LIN transceiver
 void LinWakeup(void) {
     palSetLine(LINE_LIN_STANDBY);    // Wake up TJA1029T
-    chThdSleepMilliseconds(1);       // Wait for wakeup
-    //sendLINWakeupPulses();
     uartStart(&UARTD2, &lin_config); // Start UART driver
-    //sendLINWakeupFrame(); // Send wake-up frame
-    //sendLINWakeupBreaks(); // Send additional break fields
 }
 
-
-    
-
-void InitLin() {
-    //uartStart(&UARTD2, &lin_config); // Start UART driver
-
+void InitLin(void) {
     LinWakeup();
 
     // Start LIN master thread
     chThdCreateStatic(lin_master_wa, sizeof(lin_master_wa), NORMALPRIO, lin_master_thread, nullptr);
-    // Start LIN slave thread
-    //chThdCreateStatic(lin_slave_wa, sizeof(lin_slave_wa), NORMALPRIO, lin_slave_thread, nullptr);
     
 }
